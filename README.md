@@ -1,1 +1,1 @@
-# CPlusPlus_Note
+Notes about C / C++ 
