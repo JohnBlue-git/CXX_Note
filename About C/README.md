@@ -1,9 +1,12 @@
 
 ### const, volatile, static
+modifier.c
 
 ### enum, struct, and typedef
+self_defined_type.c
 
 ### exception handling and signal
+signal.c
 
 ### memset, memcpy, strncpy
 copy.c
@@ -12,7 +15,10 @@ copy.c
 pointer.c
 
 ### preprocessor, macro, inline
+pre_process.c
 
-### if ... switch
+### common syntax
+use_switch.c \
+...
 
 

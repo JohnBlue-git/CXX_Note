@@ -1,8 +1,3 @@
-Switch
-
-
-
-
 #include <stdio.h>
 
 int main() {
