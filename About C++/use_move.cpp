@@ -1,27 +1,75 @@
-std::move() in modern C++
 
+// Do:
+// std::move is a utility in C++ that indicates an object can be "moved from" rather than copied.
+// This is particularly useful for optimizing performance by allowing the transfer of resources instead of duplicating them. 
 
-Syntax: The syntax of std::move() is:
-cpp
-複製程式碼
+// Syntax:
+//  T&& t:
+//      This is a forwarding reference (or universal reference) which can bind to both lvalues and rvalues.
+//  std::remove_reference_t<T>&&:
+//      This indicates that the function returns an rvalue reference to the type T after removing any reference qualifiers.
 template <typename T>
 constexpr std::remove_reference_t<T>&& move(T&& t) noexcept;
-* T&& t: This is a forwarding reference (or universal reference) which can bind to both lvalues and rvalues.
-* std::remove_reference_t<T>&&: This indicates that the function returns an rvalue reference to the type T after removing any reference qualifiers.
 
+// Usage:
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility> // for std::move
 
-Use Cases:
-* Moving Resources: When you have a resource (like dynamically allocated memory or a file handle) owned by an object and you want to transfer ownership of that resource to another object efficiently, you use std::move().
-* Performance Optimization: Moving is typically faster than copying for large or complex objects because it avoids unnecessary duplication of resources.
-* Avoiding Copies: Some types, like std::unique_ptr and move-only types, do not have copy constructors but do have move constructors. std::move() allows you to transfer ownership of such types.
-Example:
-cpp
-複製程式碼
-std::vector<int> source = {1, 2, 3, 4, 5};
-std::vector<int> destination = std::move(source);  // Move source to destination
+class MyClass {
+public:
+    // Constructor
+    MyClass() {
+        std::cout << "MyClass Constructor\n";
+    }
+    // Move constructor
+    // to deal with pointer / smart pointer / other complex memeber properly
+    MyClass(MyClass&& other) noexcept : world(other.world) {
+        std::cout << "MyClass Move Constructor\n";
 
-// After moving, source may be in a valid but unspecified state
-// and should not be used without reinitialization.
+        // Pointer Transfer:
+        //  The pointer will be moved from the source object to the destination object.
+        //  After the move, the source object's pointer will still point to the same memory location
+        //  , but you need to ensure that it doesn’t lead to double deletion.
+        other.world = nullptr; // Leave the moved-from object in a valid state
+    }
+    // Deconstructor
+    // to deal with pointer / other complex memeber properly
+    ~MyClass() {
+        std::cout << "MyClass Destructor\n";
+        delete world; // Clean up
+    }
 
+    void hello() {
+        std::cout << "Hello";
+        if (world) std::cout << *world;
+        std::cout << "\n";
+    }
+public:
+    std::string *world = new std::string(" World");
+    int data = 3;
+};
 
-Safety Considerations: After using std::move() on an object, the object itself may be in a "valid but unspecified" state, meaning its state is undefined but it is destructible and assignable. Always be cautious about accessing or using objects after they have been moved from.
+int main()
+{
+    // After moving, source may be in a valid but unspecified state
+    // and should not be used without reinitialization.
+
+    // After using std::move() on an object, the object itself may be in a "valid but unspecified" state
+    // , meaning its state is undefined but it is destructible and assignable !!!
+
+    std::vector<int> source = {1, 2, 3, 4, 5};
+    std::vector<int> destination = std::move(source);  // Move source to destination
+
+    MyClass obj;
+    obj.hello(); // hello world
+
+    MyClass obj2(std::move(obj));
+    obj.hello(); // hello
+    obj2.hello();// hello world
+
+    std::cout << obj.data << "\n";
+
+    return 0;
+}
