@@ -35,11 +35,24 @@ public:
         //  , but you need to ensure that it doesn’t lead to double deletion.
         other.world = nullptr; // Leave the moved-from object in a valid state
     }
+    // Move Assignment Operator
+    MyClass& operator=(MyClass&& other) noexcept {
+        std::cout << "MyClass Move Assignment Constructor\n";
+
+        if (this != &other) {
+            delete world;      // Clean up existing resource
+            world = other.world;
+            other.world = nullptr;
+        }
+        return *this;
+    }
+    // Disable
+    MyClass(const MyClass&) = delete;
+    MyClass& operator=(const MyClass&) = delete;
     // Deconstructor
-    // to deal with pointer / other complex memeber properly
     ~MyClass() {
         std::cout << "MyClass Destructor\n";
-        delete world; // Clean up
+        delete world;
     }
 
     void hello() {

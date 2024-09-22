@@ -35,6 +35,16 @@ public:
     Object(Object&& other) {
         std::cout << "Object Move Constructor\n";
     }
+    Object& operator=(Object&& other) noexcept {
+        std::cout << "Object Move Assignment Constructor\n";
+
+        if (this != &other) {
+            // ...
+        }
+        return *this;
+    }
+    Object(const Object&) = delete;
+    Object& operator=(const Object&) = delete;
     ~Object() {
         std::cout << "Object Destructor\n";
     }
