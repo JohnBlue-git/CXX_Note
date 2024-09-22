@@ -1,12 +1,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <thread>
+#include <memory> // for smart pointers
 
 //
 // Lambda in class
 //
 
-class MyClass {
+class MyClass : public std::enable_shared_from_this<MyClass> {
 private:
     int var = 3;
 
@@ -16,14 +18,32 @@ public:
     void memberFunc() const {}
 
     void lambdaFunc() const {
-        auto func = [this]() {
-            // use static memeber, don't need this ptr
+        // via shared_from_this()
+        auto self(shared_from_this());
+        auto func = [self]() {
+            // using static memeber don't need this ptr
             MyClass::staticFunc();
 
             // use memeber, need [this]
-            var; // var = 6 invalid
-            memberFunc();
+            self->var; // var = 6 invalid
+            self->memberFunc();
         };
+
+        // via this pointer
+        //auto func = [this]() {
+        //  ... use this pointer ...
+        //};
+    }
+
+    void createTask() {
+        // Create a lambda that captures `this` using shared_from_this
+        auto task = [self = shared_from_this()]() {
+            // Use `self`, which is a shared_ptr
+        };
+
+        // Simulate asynchronous execution
+        std::thread t(task);
+        t.join();
     }
 };
 

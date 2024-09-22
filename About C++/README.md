@@ -15,6 +15,8 @@ smart pointer \
 ...\
 
 ## C++ 14
+std::make_unique<T> \
+Lambda capture initializers: [capture_var = expression](parameters) { /* body */ } \
 ... \
 
 ## C++ 17

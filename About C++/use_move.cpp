@@ -25,6 +25,7 @@ public:
     }
     // Move constructor
     // to deal with pointer / smart pointer / other complex memeber properly
+    //      except smart pointers (they will be managed automatically)
     MyClass(MyClass&& other) noexcept : world(other.world) {
         std::cout << "MyClass Move Constructor\n";
 

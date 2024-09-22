@@ -24,7 +24,7 @@ There are three kinds of smart pointers available in C++:
 #include <iostream>
 #include <memory> // for smart pointers
 
-class Object {
+class Object : public std::enable_shared_from_this<Object> {
 public:
     Object() {
         std::cout << "Object Constructor\n";
@@ -41,6 +41,26 @@ public:
 
     void hello() {
         std::cout << "Hello\n";
+
+        // About share from this VS raw this pointer
+        // Ownership Management:
+        //     Raw Pointer: Does not manage the object's lifetime. You must manually ensure that the object is deleted when it's no longer needed, which can lead to memory leaks or dangling pointers.
+        //     std::shared_ptr: Automatically manages the object's lifetime using reference counting. When the last shared_ptr to the object is destroyed, the object is deleted.
+        // Safety:
+        //     Raw Pointer: If you try to use a raw pointer after the object it points to has been deleted, you'll encounter undefined behavior.
+        //     std::shared_ptr with enable_shared_from_this: Provides a safe way to access the object via shared_from_this(), ensuring that the pointer is valid and that the object remains alive as long as there are shared_ptrs pointing to it.
+        // Shared Ownership:
+        //     Raw Pointer: Does not allow for shared ownership; if multiple parts of your code need to share ownership, you'll end up with potential issues.
+        //     std::shared_ptr: Supports shared ownership, making it easy to pass ownership around without worrying about who is responsible for deleting the object.
+        //
+        // Important Notes:
+        //    You must ensure that the object is managed by a std::shared_ptr before calling shared_from_this(). If you call it on an object that is not owned by a shared_ptr, it will result in undefined behavior.
+        //    It helps in avoiding common pitfalls of raw pointers and ensures proper reference counting.
+        //
+        // Usage:
+        //std::shared_ptr<Object> self = shared_from_this();
+        //auto self(shared_from_this());
+        // ... use self pointer ...
     }
 };
 
@@ -51,13 +71,13 @@ int main() {
 
     /// Creating a unique_ptr
     // way 1
-    Object uniObj;
-    std::unique_ptr<Object> uniPtr = std::make_unique<Object>(std::move(uniObj));
-    uniObj.hello(); // still can use
+    Object* uniObj = new Object(); // use Object uniObj; will cause invalid pointer
+    std::unique_ptr<Object> uniPtr(uniObj);
+    uniObj->hello(); // still can use
     // way 2
     //std::unique_ptr<Object> uniPtr = std::make_unique<Object>();
     //std::unique_ptr<Object> uniPtr = std::make_unique<Object>(3);
-
+    
     // Transferring ownership to another unique_ptr using std::move
     std::unique_ptr<Object> uniPtr2 = std::move(uniPtr);
     if (!uniPtr) {
@@ -70,8 +90,8 @@ int main() {
 
     // Creating a shared pointer with resource ownership
     // way 1
-    Object shrObj;
-    std::shared_ptr<Object> shrPtr = std::make_shared<Object>(std::move(shrObj));
+    Object* shrObj = new Object();
+    std::shared_ptr<Object> shrPtr(shrObj);
     // way 2
     //std::shared_ptr<Object> shrPtr = std::make_shared<Object>();
     //std::shared_ptr<Object> shrPtr = std::make_shared<Object>(3);
