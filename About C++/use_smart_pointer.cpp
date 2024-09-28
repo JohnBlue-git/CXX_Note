@@ -68,8 +68,8 @@ public:
         //    It helps in avoiding common pitfalls of raw pointers and ensures proper reference counting.
         //
         // Usage:
-        //std::shared_ptr<Object> self = shared_from_this();
-        //auto self(shared_from_this());
+     // std::shared_ptr<Object> self = shared_from_this();
+        auto self(shared_from_this());
         // ... use self pointer ...
     }
 };
