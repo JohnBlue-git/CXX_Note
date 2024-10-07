@@ -9,6 +9,13 @@ Exception 定義：
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <semaphore.h>
+
+// Time out
+sem_t timeout;
+void stop_signal(int signum) {
+    sem_post(&timeout);
+}
 
 // Terminate flag
 sig_atomic_t volatile finished = 0;
@@ -132,7 +139,28 @@ NAME:
                 (int) finished);
         return EXIT_FAILURE;
     }
+/*
+# 3
+ timeout design
 
+#include <semaphore.h>
+
+sem_t timeout;
+void stop_signal(int signum) {
+    sem_post(&timeout);
+}
+*/
+    // Register the timeout handler for SIGALRM signal
+    signal(SIGALRM, stop_signal);
+    alarm(60); // Set a timeout of 60 seconds
+    // Register crtl+C or kill
+    signal(SIGINT, stop_signal);
+    signal(SIGTERM, stop_signal);
+    // Wait for time out signal
+    sem_init(&timeout, 0, 0);
+    sem_wait(&timeout);
+
+	
     return EXIT_SUCCESS; // 0 success or 1
 }
 
