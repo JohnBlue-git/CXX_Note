@@ -1,4 +1,4 @@
-# Modern Cpp 在追求什麼?
+# What does Modern Cpp pursue
 
 When you come to the Modern CPP, CPP is more than just an object-oriented C. It also pursues Type-SAFE, MetapRographing and Static/Compile Time Error. It also contains the characteristics of functions. It's completely different.
 
