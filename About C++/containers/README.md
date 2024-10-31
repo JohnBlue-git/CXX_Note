@@ -309,7 +309,7 @@ conclude:
 - it's safe to access distinct elements of the same container
 - implementations are required to avoid data races when the contents of the contained object in different elements in the same container
 
-sample code to do the protection: \
+sample code to do the protection:
 ```c++
 #include <iostream>
 #include <vector>
