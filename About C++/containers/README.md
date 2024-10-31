@@ -291,3 +291,73 @@
 - void push(T&& )
 - const T& top() const
 - void pop()
+
+## Thread safety of containers
+
+### Definition of thread safe:
+In multi-threaded computer programming, a function is thread-safe when it can be invoked or accessed concurrently by multiple threads without causing unexpected behavior, race conditions, or data corruption.
+
+### Only const member functions is thread safe !
+
+official: \
+https://en.cppreference.com/w/cpp/container
+
+online discussion: \
+https://stackoverflow.com/questions/12931787/c11-stl-containers-and-thread-safety
+
+conclude:
+- it's safe to access distinct elements of the same container
+- implementations are required to avoid data races when the contents of the contained object in different elements in the same container
+
+sample code to do the protection: \
+```c++
+#include <iostream>
+#include <vector>
+#include <thread>
+#include <mutex>
+
+std::mutex vectorMutex; // Mutex to protect the vector
+
+// Function to perform some operation on elements of a vector
+void processVector(std::vector<int>& vec) {
+    vectorMutex.lock();
+    vec.push_back(1);
+    vectorMutex.unlock();
+}
+void processVar(int& var) {
+    var += 1;
+}
+
+
+
+int main() {
+    // Create a vector with some initial values
+    std::vector<int> numbers;
+    int num = 0;
+
+    // Define the number of threads to use
+    int numThreads = 1000;
+
+    // Create threads
+    std::vector<std::thread> threads;
+    for (int i = 0; i < numThreads; ++i) {
+        threads.push_back(std::thread(processVector, std::ref(numbers)));
+        threads.push_back(std::thread(processVar, std::ref(num)));
+    }
+
+    // Join threads
+    for (auto& thread : threads) {
+        thread.join();
+    }
+
+    // Output the modified vector
+    std::cout << "Modified vector:" << std::endl;
+    //for (int num : numbers) {
+    //    std::cout << num << " ";
+    //}
+    std::cout << numbers.size() << std::endl;
+    std::cout << num << std::endl;
+
+    return 0;
+}
+```
