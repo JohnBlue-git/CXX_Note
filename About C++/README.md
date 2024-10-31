@@ -9,18 +9,41 @@ There are many examples in modern C ++, and then among many changes, I think thi
 # C++ standard
 
 ## C++ 11
-RAII \
-std::move \
-smart pointer \
-...\
+- RAII
+- std::move
+- smart pointer (unique_ptr、shared_ptr、weak_ptr)
+- lambda function
+  ```c++
+  auto f = [](int x, int y) -> int { return x + y; };
+  int result = f(3, 4);  // result = 7
+  ```
+- auto
+  ```c++
+  std::vector<int> v = {1, 2, 3, 4, 5};
+
+  for (auto& i : v) {
+      i *= 2;
+  }
+  ```
+- (template) type alias
+  ```c++
+  template <typename T>
+  using Vec = std::vector<T>;
+
+  Vec<int> v = {1, 2, 3, 4, 5};
+  ```
+- ...
 
 ## C++ 14
-std::make_unique<T> \
-Lambda capture initializers: [capture_var = expression](parameters) { /* body */ } \
-... \
+- std::make_unique<T>
+- lambda capture initializers
+  ```c++
+  [capture_var = expression](parameters) { /* body */ }
+  ```
+- ...
 
 ## C++ 17
-std::optional \
-...\
+- std::optional<T>
+- ...
 
 
