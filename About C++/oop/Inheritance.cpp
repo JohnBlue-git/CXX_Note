@@ -1,37 +1,3 @@
-/*
-Auther: John Blue
-Time: 2022/6
-Platform: atom
-Object: Inheritance
-Reference: http://ot-note.logdown.com/posts/173174/note-cpp-named-type-convertion
-
-Modifier ::
-
-public is accessible for everyone
-protected is only accessible in the class and its derived class
-private is only accessible in the class
-
-Inheritance ::
-
-          inheritance/ accessibility of asset become
-public    inheritance: private protected public
-protected inheritance: private protected protected
-private   inheritance: private private   private
-
-Override ::
-
-is a mechanism for a dirived class to redefine functions in base class to meet its own demand
-
-Virtual or Non-Virtual ::
-
-in c++ C#, there are two inheritance situations
-in Non-Virtual (if method is not defined virtual in base class)
-, the method defined in derived class will not overide the method in base class
-, but the object will use method from derived class
-in Virtual (if method is defined virtual in base class)
-, the method will be overide
-, and the compiler will determine which class theo bject belong then use the method defined by the class
-*/
 
 #include <iostream>
 using namespace std;

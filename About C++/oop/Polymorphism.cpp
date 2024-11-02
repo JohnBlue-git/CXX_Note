@@ -1,18 +1,3 @@
-/*
-Auther: John Blue
-Time: 2022/6
-Platform: atom
-Object: Polymorphism
-
-Polymorphism ::
-
-is a property to offer a single interface for different type of child classes
-is a property to allow different implementations with the same function names in different child class that inherent the same parent
-
-Pure Virtual Function ::
-
-it mean that the defined function in base class is purely empty, and the derived class will have to defined implementation
-*/
 
 #include <iostream>
 using namespace std;

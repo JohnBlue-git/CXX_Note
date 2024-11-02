@@ -16,7 +16,7 @@ A bundling of data with the mechanisms or methods
 A feature to reuse or inherit code with similar behaviors or data
 
 ### Polymorphism
-A feature to use the same interface for similar but different classes
+A feature to implement similar but different child classes with the same interface or parent
 
 ### Interface
 A description that defines what functions or data a class must have
@@ -67,6 +67,10 @@ Meaning of data encapsulation:
 - **public** can be accessed by all others
 - **protected** can only be accessed by itself or its own descendant
 - **private** can only be accessed by itself
+
+### static
+- lifespan along with the scope of program files
+- members belong to class instead of entity (for class)
 
 ### friend
 To define classes or functions that can utilize the memeber in this class

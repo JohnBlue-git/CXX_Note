@@ -1,22 +1,3 @@
-/*
-Auther: John Blue
-Time: 2022/6
-Platform: atom
-Object: Multi - Inheritance
-
-Multi - Inheritance ::
-
-is property to inherent from differet parent classes
-(c++) can do multi_inheritance but java,c# can't
-(java)(C#) can use interface to implment multi_inheritance
-
-when to use?
-
-it is useful when you don't want to create an instance of an object but want to execute some function on it
-(by using static functions, we don't have to depend on any entities)
-it can be used as interface in C++
-*/
-
 
 #include<iostream>
 using namespace std;

@@ -1,25 +1,3 @@
-/*
-Auther: John Blue
-Time: 2022/6
-Platform: atom
-Object: Encapsulation
-
-private:
-only itshelef can use
-
-protected:
-only itshlef and its child class can use
-
-public:
-all class and other function can use
-
-static:
-only in the scope can use
-
-friend:
-to define classes or functions that can utilize the memeber in this class
-*/
-
 
 #include <iostream>
 using namespace std;
