@@ -27,6 +27,13 @@ A description that derived class want to redefined the same functions already de
 ### overloading (often misleading)
 A mechanism define multiple functions with the same function name
 
+### Multi - Inheritance ::
+- It is property to inherent from differet parent classes
+- c++ can do multi_inheritance but java,c# can't
+- java and C# can use interface to implment multi_inheritance
+- when to use ? \
+It is useful when you don't want to create an instance of an object but want to execute some function on it (by using static functions, we don't have to depend on any entities) it can be used as interface in C++
+
 ## SOID principle
 5 principle to make program easy to maintain and extend with OOP
 
@@ -60,6 +67,9 @@ Meaning of data encapsulation:
 - **public** can be accessed by all others
 - **protected** can only be accessed by itself or its own descendant
 - **private** can only be accessed by itself
+
+### friend
+To define classes or functions that can utilize the memeber in this class
 
 ### inheritance
 - **public inheritance**
