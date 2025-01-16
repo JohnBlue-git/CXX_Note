@@ -32,6 +32,14 @@ There are many examples in modern C ++, and then among many changes, I think thi
 
   Vec<int> v = {1, 2, 3, 4, 5};
   ```
+
+- future and promise
+```c++
+std::promise<int> promise;
+std::future<int> future = promise.get_future();
+future.get()
+```
+
 - ...
 
 ## C++ 14
