@@ -66,6 +66,70 @@ int main() {
     };
     std::cout << "Result: " << lambdaFunc(9) << std::endl;
 
+    // Capture all variables in the surrounding scope by value.
+    int x1 = 10, y1 = 20;
+    auto lambda1 = [=]() {
+        std::cout << x1 << ", " << y1 << std::endl;
+    };
+
+    // Capture all variables in the surrounding scope by reference.
+    int x2 = 10, y2 = 20;
+    auto lambda2 = [&]() {
+        x2 += 5;
+        y2 += 10;
+        std::cout << x << ", " << y << std::endl;
+    };
+
+    // Some varable are captured as const but some are not
+    int x3 = 10;
+    int y3 = 20;
+    auto lambda3 = [x3, &y3]() {
+        std::cout << "Captured by value (const): " << x3 << std::endl;
+        y3 += 5; // Captured by reference, so this can be modified
+        std::cout << "Captured by reference (mutable): " << y3 << std::endl;
+    };
+
+    //
+    // Inherit callback in lambda function
+    //
+
+    // callbackFunction
+    auto callbackFunction = []() {
+        std::cout << "Callback function called!" << std::endl;
+    };
+
+    // callback
+    std::function<void()> callback = callbackFunction;
+
+    // Lambda capturing callback by value (copy)
+    auto lambdaCapturedByCopy = [callback]() {
+        std::cout << "Lambda called!" << std::endl;
+        callback(); // Calling the copied callback
+    };
+    lambdaCapturedByCopy();
+
+    // Lambda capturing callback by move
+    auto lambdaCapturedByMove = [callback = std::move(callback)]() {
+        std::cout << "Lambda called!" << std::endl;
+        callback(); // Calling the moved callback
+    };
+    lambdaCapturedByMove();
+    // After moving, callback should no longer be used in main
+    // std::cout << callback ? "Callback still valid" : "Callback moved" << std::endl;
+
+    // callback1
+    std::function<void()> callback1 = callbackFunction;
+
+    // Nested lambda function
+    auto ByCopy = [callback1]() {
+        auto ByMove = [callback1 = std::move(callback1)]() {
+            std::cout << "Lambda called!" << std::endl;
+            callback1();
+        };
+        ByMove();
+    };
+    ByCopy();
+    
     //
     // With std::for_each
     //
@@ -97,6 +161,6 @@ int main() {
             return num % 2 == 0;
         });
     std::cout << "Number of even elements in the vector: " << evenCount << "\n";
-
+    
     return 0;
 }
