@@ -40,12 +40,11 @@ void commonUsage() {
     }
 }
 
-
 //
-// Passing std::optional as reference
+// Passing std::optional
 //
 
-void printOptionalString(std::optional<std::string>& opt) {
+void printOptionalString(std::optional<std::string> opt) {
     if (opt) {
         std::cout << "Value: " << opt.value() << std::endl;
         opt.value() = "c++ is difficult";
@@ -68,6 +67,35 @@ void passOptional() {
     std::optional<std::string> optStr3;
     // Outputs: No value provided.
     printOptionalString(optStr3);
+}
+
+//
+// Passing std::optional as reference
+//
+
+void printOptionalRefString(std::optional<std::string>& opt) {
+    if (opt) {
+        std::cout << "Ref Value: " << opt.value() << std::endl;
+        opt.value() = "c++ is difficult";
+    } else {
+        std::cout << "No value provided." << std::endl;
+    }
+}
+
+void passOptionalRef() {
+    const std::string str1 = "C++ is fun!";
+    std::string str2(str1);
+    std::optional<std::string> optStr2 = str2;
+
+    // Outputs: Ref Value: C++ is fun!
+    printOptionalRefString(optStr2);
+    // Outputs: Ref Value: C++ is difficullt!
+    std::cout << "Ref Value: " << optStr2.value() << std::endl;
+    
+    // No value
+    std::optional<std::string> optStr3;
+    // Outputs: No value provided.
+    printOptionalRefString(optStr3);
 }
 
 //
