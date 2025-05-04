@@ -16,8 +16,11 @@
 - auto cbegin() const
 - int compare (const string& ) const
 - char& operator[] (size_t ) const
-- string& operator+=(...)
-- void push_back(...)
+- string& operator+=(char )
+- string& operator+=(string )
+  - O(N)
+- void push_back(char )
+  - O(1)
 - void pop_back()
 - string substr (size_t pos = 0, size_t len = npos) const
 - string& erase (size_t pos = 0, size_t len = npos)
@@ -46,6 +49,7 @@
 
 ## **std::vector<T>**
 - https://cplusplus.com/reference/vector/vector/
+- it is C array with warpping
 - constructor
     ```c++
     #include <vector>
@@ -62,13 +66,71 @@
 - auto begin()
 - auto rbegin()
 - auto cbegin() const
-- void push_back(T )
+- void push_back(const T& )
+- void push_back(T&& )
 - void pop_back()
-- auto insert (auto pos, const T& val)
-- void insert (auto pos, size_t n, const T& val)
-- void insert (auto pos, auto first, auto last)
-- auto erase (auto pos)
-- auto erase (auto first, auto last);
+- auto insert (auto it_pos, const T& val)
+- void insert (auto it_pos, size_t n, const T& val)
+- void insert (auto it_pos, auto it_first, auto it_last)
+- void emplace (auto it_pos, ...)
+- auto erase (auto it_pos)
+- auto erase (auto it_first, auto it_last);
+- void clear()
+- T at(size_type n)
+  - with exception
+- T operator[] (size_type n)
+  - no-throw guarantee. Otherwise, the behavior is undefined.
+
+## **std::list<T>**
+- https://cplusplus.com/reference/list/list/
+- it is doubly-linked list with warpping
+- constructor
+    ```c++
+    #include <algorithm>
+    #include <iostream>
+    #include <list>
+     
+    int main()
+    {
+        // Create a list containing integers
+        std::list<int> l = {7, 5, 16, 8};
+     
+        // Add an integer to the front of the list
+        l.push_front(25);
+        // Add an integer to the back of the list
+        l.push_back(13);
+     
+        // Insert an integer before 16 by searching
+        auto it = std::find(l.begin(), l.end(), 16);
+        if (it != l.end())
+            l.insert(it, 42);
+     
+        // Print out the list
+        std::cout << "l = { ";
+        for (int n : l)
+            std::cout << n << ", ";
+        std::cout << "};\n";
+    }
+    ```
+- char& front() const
+- char& back() const
+- size_t size() const
+- char& at(size_t ) const
+- auto begin()
+- auto rbegin()
+- auto cbegin() const
+- void push_back(const T& )
+- void push_back(T&& )
+- void push_front(const T& )
+- void push_front(T&& )
+- void pop_back()
+- void pop_front()
+- auto insert (auto it_pos, const T& val)
+- void insert (auto it_pos, size_t n, const T& val)
+- void insert (auto it_pos, auto it_first, auto it_last)
+- void emplace (auto it_pos, ...)
+- auto erase (auto it_pos)
+- auto erase (auto it_first, auto it_last);
 - void clear()
 
 ## std::tuple<...>
@@ -104,7 +166,7 @@
 - pair<auto, bool> insert(T&& )
 - auto erase(const auto pos)
 - size_t erase(const T& )
-- auto erase(const auto first, const auto last)
+- auto erase(auto it_first, auto it_last)
 - void clear()
 - auto find(const T& )
 - size_t count(const T ) const
@@ -119,6 +181,7 @@
 
 ## **std::unordered_map<T>**
 - https://cplusplus.com/reference/unordered_map/unordered_map/
+- it is a hash table
 - constructor
     ```c++
     #include <unordered_map>
@@ -135,7 +198,7 @@
     ```
 - auto erase(const auto pos)
 - size_t erase(const T& )
-- auto erase(const auto first, const auto last)
+- auto erase(const auto it_first, const auto it_last)
 - void clear()
 - auto find(const T& )
 - size_t count(const T ) const 
@@ -149,6 +212,7 @@
 
 ## **std::unordered_multimap<T>**
 - https://cplusplus.com/reference/unordered_map/unordered_multimap/
+- it is a hash table
 - constructor
     ```c++
     #include <unordered_multimap>
@@ -169,7 +233,7 @@
 - pair<auto, bool> insert(T&& )
 - auto erase(const auto pos)
 - size_t erase(const T& )
-- auto erase(const auto first, const auto last)
+- auto erase(auto it_first, auto it_last)
 - void clear()
 - auto find(const T& )
 - size_t count(const T ) const 
@@ -185,6 +249,7 @@
 
 ## **std::multiset<T>**
 - https://cplusplus.com/reference/set/multiset/
+- it is a sorted tree
 - constructor
     ```c++
     #include <multiset>
@@ -193,6 +258,7 @@
 
 ## **std::map<T>**
 - https://cplusplus.com/reference/map/map/
+- it is a sorted tree
 - constructor
     ```c++
     #include <map>
@@ -232,6 +298,7 @@
 
 ## **std::multimap<T>**
 - https://cplusplus.com/reference/map/multimap/
+- it is a sorted tree
 - constructor
     ```c++
     #include <multimap>
@@ -297,7 +364,8 @@
 ### Definition of thread safe:
 In multi-threaded computer programming, a function is thread-safe when it can be invoked or accessed concurrently by multiple threads without causing unexpected behavior, race conditions, or data corruption.
 
-### Only const member functions is thread safe !
+### Only const member functions are thread safe !
+Concurrent access to elements of a container is safe, even if different threads are accessing different elements, provided no thread is modifying the container structure. \
 
 official: \
 https://en.cppreference.com/w/cpp/container
@@ -306,8 +374,8 @@ online discussion: \
 https://stackoverflow.com/questions/12931787/c11-stl-containers-and-thread-safety
 
 conclude:
-- it's safe to access distinct elements of the same container
-- implementations are required to avoid data races when the contents of the contained object in different elements in the same container
+- it's thread safe to access distinct elements of the same container (const means no structure changes).
+- Also, modifying the same element from multiple threads without synchronization can lead to a data race. So protection shall be implemented
 
 sample code to do the protection:
 ```c++
