@@ -46,3 +46,11 @@ The **Curiously Recurring Template Pattern (CRTP)** is used here to create a **S
 | **Inlining** | Rare | Common |
 | **Binary Size** | Smaller (one class) | Larger (template bloat) |
 | **Flexibility** | High (Heterogeneous lists) | Low (Static types only) |
+
+## Why is CRTP faster?
+
+- `Elimination of Indirection:` Virtual functions require a vtable lookup. The CPU has to find the object's vtable, find the function pointer, and then jump to that address. This can cause a "cache miss" if the vtable isn't in the CPU cache.
+
+- `Inlining (The Real Speed Boost):` Because the compiler knows the exact function being called at compile-time, it can inline the code. This means it replaces the function call with the actual logic, eliminating the overhead of pushing/popping from the stack entirely.
+
+- `Branch Prediction:` Modern CPUs are good at predicting branches, but "indirect jumps" (used by virtual functions) are harder for the CPU to predict than "direct jumps" (used by CRTP).
